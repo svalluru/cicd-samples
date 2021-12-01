@@ -2,7 +2,7 @@ def templatePath = 'https://raw.githubusercontent.com/svalluru/cicd-samples/main
 def templateName = 'ruby-example' 
 pipeline {
   agent any
-  }
+  
   options {
     timeout(time: 20, unit: 'MINUTES') 
   }
