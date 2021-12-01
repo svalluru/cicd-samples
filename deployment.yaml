@@ -1,0 +1,22 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: ruby-hello
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ruby-sample
+  template:
+    metadata:
+      labels:
+        app: ruby-sample
+    spec:
+      containers:
+        - name: ruby-sample
+          image: 'docker-devops-tools.apps.ocp4.kskels.com/ruby-image:latest'
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+      imagePullSecrets:
+        - name: regsecret
