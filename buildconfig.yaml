@@ -1,0 +1,21 @@
+kind: BuildConfig
+apiVersion: build.openshift.io/v1
+metadata:
+  name: "ruby-sample-build" 
+spec:
+  runPolicy: "Serial" 
+  source: 
+    git:
+      uri: "https://github.com/openshift/ruby-hello-world"
+  strategy: 
+    sourceStrategy:
+      from:
+        kind: "ImageStreamTag"
+        namespace: openshift
+        name: "ruby:3.0-ubi7"
+  output:
+    to:
+      kind: "DockerImage"
+      name: "docker-devops-tools.apps.ocp4.kskels.com/ruby-image:latest"
+    pushSecret:
+      name: "regsecret"
