@@ -1,0 +1,123 @@
+{
+  "kind": "Template",
+  "apiVersion": "v1",
+  "metadata": {
+    "name": "ruby-template-example1"
+  },
+  "objects": [
+{
+  "kind": "BuildConfig",
+  "apiVersion": "build.openshift.io/v1",
+  "metadata": {
+    "name": "ruby-sample-build1"
+  },
+  "spec": {
+    "runPolicy": "Serial",
+    "source": {
+      "git": {
+        "uri": "https://github.com/openshift/ruby-hello-world"
+      }
+    },
+    "strategy": {
+      "sourceStrategy": {
+        "from": {
+          "kind": "ImageStreamTag",
+          "namespace": "openshift",
+          "name": "ruby:3.0-ubi7"
+        }
+      }
+    },
+    "output": {
+      "to": {
+        "kind": "DockerImage",
+        "name": "docker-devops-tools.apps.ocp4.kskels.com/ruby-image:latest"
+      },
+      "pushSecret": {
+        "name": "regsecret"
+      }
+    }
+  }
+},
+{
+  "kind": "Deployment",
+  "apiVersion": "apps/v1",
+  "metadata": {
+    "name": "ruby-hello1"
+  },
+  "spec": {
+    "replicas": 1,
+    "selector": {
+      "matchLabels": {
+        "app": "ruby-sample1"
+      }
+    },
+    "template": {
+      "metadata": {
+        "labels": {
+          "app": "ruby-sample1"
+        }
+      },
+      "spec": {
+        "containers": [
+          {
+            "name": "ruby-sample1",
+            "image": "docker-devops-tools.apps.ocp4.kskels.com/ruby-image:latest",
+            "ports": [
+              {
+                "containerPort": 8080,
+                "protocol": "TCP"
+              }
+            ]
+          }
+        ],
+        "imagePullSecrets": [
+          {
+            "name": "regsecret"
+          }
+        ]
+      }
+    }
+  }
+},
+{
+  "apiVersion": "v1",
+  "kind": "Service",
+  "metadata": {
+    "name": "ruby-hello1",
+    "namespace": "icon1"
+  },
+  "spec": {
+    "selector": {
+      "app": "ruby-hello1"
+    },
+    "ports": [
+      {
+        "protocol": "TCP",
+        "port": 8081,
+        "targetPort": 8080
+      }
+    ]
+  }
+},
+{
+  "kind": "Route",
+  "apiVersion": "route.openshift.io/v1",
+  "metadata": {
+    "name": "ruby-hello1",
+    "namespace": "icon1"
+  },
+  "spec": {
+    "host": "ruby-hello1-icon1.apps.sv.sno1.home.lab",
+    "to": {
+      "kind": "Service",
+      "name": "ruby-hello1",
+      "weight": 100
+    },
+    "port": {
+      "targetPort": 8080
+    },
+    "wildcardPolicy": "None"
+  }
+}
+  ]
+}
