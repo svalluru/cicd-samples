@@ -84,7 +84,7 @@
   "kind": "Service",
   "metadata": {
     "name": "ruby-hello1",
-    "namespace": "icon1"
+    "namespace": "icon2"
   },
   "spec": {
     "selector": {
@@ -104,10 +104,10 @@
   "apiVersion": "route.openshift.io/v1",
   "metadata": {
     "name": "ruby-hello1",
-    "namespace": "icon1"
+    "namespace": "icon2"
   },
   "spec": {
-    "host": "ruby-hello1-icon1.apps.sv.sno1.home.lab",
+    "host": "ruby-hello1-icon2.apps.sv.sno1.home.lab",
     "to": {
       "kind": "Service",
       "name": "ruby-hello1",
