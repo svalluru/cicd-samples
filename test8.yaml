@@ -1,0 +1,4 @@
+
+type = CLUSTER_CREATE
+nodes_name = idrac-2Y23DG
+dns_servers = 8.8.4.4
