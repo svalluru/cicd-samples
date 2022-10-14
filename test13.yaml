@@ -1,0 +1,65 @@
+apiVersion: ran.openshift.io/v1
+kind: SiteConfig
+metadata:
+  name: cluster3
+  namespace: cluster3
+spec:
+  baseDomain: alflab.att.com
+  clusterImageSetNameRef: v4.10.24
+  clusters:
+  - additionalNTPSources:
+    - 192.168.50.92
+    clusterLabels:
+      common: 'true'
+      duProfile: v4.10
+      groupDuSno: ''
+      sites: cluster3
+    clusterName: cluster3
+    clusterNetwork:
+    - cidr: 10.128.0.0/14
+      hostPrefix: 23
+    machineNetwork:
+    - cidr: 172.25.181.56/29
+    networkType: OVNKubernetes
+    nodes:
+    - bmcAddress: idrac-virtualmedia+https://172.25.181.66/29/redfish/v1/Systems/System.Embedded.1
+      bmcCredentialsName:
+        name: bmc-secret
+      bootMACAddress: D0:8E:79:F3:68:4C
+      bootMode: UEFI
+      hostName: cluster3-node01
+      nodeNetwork:
+        config:
+          dnsResolver:
+            config:
+              search:
+              - alflab.att.com
+              server:
+              - 192.168.50.92
+          interfaces:
+          - ipv4:
+              address:
+              - ip: 172.25.181.58/29
+                prefixLength: 29
+              dhcp: false
+              enabled: true
+            name: eno8303
+            state: up
+            type: ethernet
+          routes:
+            config:
+            - destination: 0.0.0.0
+              nextHopAddress: 172.25.181.57
+              nextHopInterface: eno8303
+              tableId: 254
+        interfaces:
+        - macAddress: D0:8E:79:F3:68:4C
+          name: eno8303
+      role: master
+      rootDeviceHints:
+        deviceName: '1:0:0:0'
+    serviceNetwork:
+    - 172.30.0.0/16
+  pullSecretRef:
+    name: pull-secret
+  sshPublicKey: ssh-public-content
